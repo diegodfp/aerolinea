@@ -9,6 +9,7 @@ import com.aerolinea.model.domain.service.ModelService;
 //import com.aerolinea.plane.application.PlaneUseCase;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.users.domain.service.UserLoginUseCase;
 
 public class LoginUi {
@@ -18,16 +19,17 @@ public class LoginUi {
     private final AirlineService airlineService;
     private final ModelService modelService;
     private final StatusService statusService;
-
+    private final TripCrewService tripCrewService;
     
 
     public LoginUi(UserLoginUseCase loginUseCase, PlaneService planeService, AirlineService airlineService,
-            ModelService modelService, StatusService statusService) {
+            ModelService modelService, StatusService statusService, TripCrewService tripCrewService) {
         this.loginUseCase = loginUseCase;
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.modelService = modelService;
         this.statusService = statusService;
+        this.tripCrewService = tripCrewService;
     }
 
     public void showLogin() {
@@ -87,7 +89,7 @@ public class LoginUi {
                     if ("administrador".equals(rol)) {
                         System.out.println(" Ingreso Como Administrador");
                         frame.dispose(); // Cerrar la ventana actual
-                        AdminUi adminUi = new AdminUi(planeService, airlineService, modelService, statusService); // Crear instancia de AdminUi
+                        AdminUi adminUi = new AdminUi(planeService, airlineService, modelService, statusService, tripCrewService); // Crear instancia de AdminUi
                         adminUi.showAdminUi(); // Mostrar la ventana de administrador
                     } else if ("Agente de ventas".equals(rol)) {
                         // Lógica para vista de agente de ventas
