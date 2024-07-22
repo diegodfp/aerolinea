@@ -17,7 +17,6 @@ public class ModelRepository implements ModelService {
     public List<Model> getAllModels() {
           String sql = "SELECT id, name FROM models";
         List<Model> models = new ArrayList<>();
-
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
