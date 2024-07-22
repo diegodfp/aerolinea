@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import com.aerolinea.employee.domain.entity.Employee;
-//import com.aerolinea.tripCrew.application.TripCrewUseCase;
 import com.aerolinea.tripCrew.domain.entity.TripConnectionInfo;
 import com.aerolinea.tripCrew.domain.service.TripCrewService;
 
@@ -21,7 +20,6 @@ public class AssignCrewToTripUi  extends JPanel {
 
     public AssignCrewToTripUi(TripCrewService tripCrewService) {
         this.tripCrewService = tripCrewService;
-        initializeUi();
     }
 
 
