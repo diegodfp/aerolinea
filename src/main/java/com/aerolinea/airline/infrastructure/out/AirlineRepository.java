@@ -25,7 +25,7 @@ public class AirlineRepository implements AirlineService {
             while (resultSet.next()) {
                 Airline airline = new Airline();
                 airline.setId(resultSet.getInt("id"));
-                airline.setName(resultSet.getString("name"));
+                airline.setName(    resultSet.getString("name"));
                 airlines.add(airline);
             }
 

@@ -6,6 +6,8 @@ public class Trip {
     private int id;
     private Date date;
     private double price;
+
+    
     public Trip() {
     }
     public Trip(int id, Date date, double price) {

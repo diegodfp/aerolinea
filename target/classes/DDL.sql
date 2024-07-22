@@ -1,10 +1,9 @@
- 
- 
- DROP SCHEMA IF EXISTS aerolinea;
 
-CREATE SCHEMA IF NOT EXISTS aerolinea;
-USE aerolinea;
+drop database if exists aerolinea;
 
+create database if not exists aerolinea;
+
+use aerolinea;
 
 CREATE TABLE rol(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -125,8 +124,10 @@ CREATE TABLE planes(
     fabricationDate DATE NOT NULL,
     idStatus INT NOT NULL,
     idModel INT NOT NULL,
+    idAirline INT NOT NULL,
     FOREIGN KEY(idStatus)REFERENCES status(id),
-    FOREIGN KEY (idModel)REFERENCES models(id)
+    FOREIGN KEY (idModel)REFERENCES models(id),
+    FOREIGN KEY (idAirline) references airlines(id)
 );
 CREATE TABLE revisions(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -202,8 +203,16 @@ INSERT INTO models (name, manufacturerID) VALUES
   ('Activo'),
   ('En Mantenimiento'),
   ('Retirado');
+  
+  INSERT INTO airlines (name) values
+  ("avianca"),
+  ("Aerolinea barata");
 
-  INSERT INTO planes (plates, capacity, fabricationDate, idStatus, idModel) VALUES
-  ('N12345', 180, '2020-01-01', (SELECT id FROM status WHERE name = 'Activo'), (SELECT id FROM models WHERE name = 'A320')),
-  ('N56789', 215, '2018-07-15', (SELECT id FROM status WHERE name = 'Activo'), (SELECT id FROM models WHERE name = '737')),
-  ('N90123', 70, '2015-03-10', (SELECT id FROM status WHERE name = 'En Mantenimiento'), (SELECT id FROM models WHERE name = 'E190'));
+  INSERT INTO planes (plates, capacity, fabricationDate, idStatus, idModel, idAirline) VALUES
+  ('N12345', 180, '2020-01-01', (SELECT id FROM status WHERE name = 'Activo'), (SELECT id FROM models WHERE name = 'A320'),1),
+  ('N56789', 215, '2018-07-15', (SELECT id FROM status WHERE name = 'Activo'), (SELECT id FROM models WHERE name = '737'),1),
+  ('N90123', 70, '2015-03-10', (SELECT id FROM status WHERE name = 'En Mantenimiento'), (SELECT id FROM models WHERE name = 'E190'),1);
+  use aerolinea;
+  select * from planes;
+  
+  select  * from usuario;
