@@ -11,6 +11,7 @@ import com.aerolinea.plane.infrastructure.in.PlaneDetailsUi;
 import com.aerolinea.plane.infrastructure.in.PlaneRegisterUi;
 import com.aerolinea.plane.infrastructure.in.PlaneUpdateUi;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.tripCrew.infrastructure.in.AssignCrewToTripUi;
 
 import java.awt.*;
 
@@ -20,7 +21,7 @@ public class AdminUi {
     private final AirlineService airlineService;
     private final ModelService modelService;
     private final StatusService statusService;
-
+    
     
 
     public AdminUi(PlaneService planeService, AirlineService airlineService, ModelService modelService,
@@ -100,7 +101,22 @@ public class AdminUi {
     private static JPanel createCrewPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
-        panel.add(createMenuButton("Asignar Tripulación"));
+    
+        JButton assignCrewButton = createMenuButton("Asignar Tripulación");
+        assignCrewButton.addActionListener(e -> {
+            // Mostrar la interfaz para asignar tripulación
+            JFrame assignCrewFrame = new JFrame("Asignar Tripulación");
+            assignCrewFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            assignCrewFrame.setSize(600, 300);
+            assignCrewFrame.setLocationRelativeTo(null);
+            AssignCrewToTripUi assignCrewUi = new AssignCrewToTripUi(tripCrewService);
+            assignCrewFrame.add(assignCrewUi);
+            assignCrewFrame.setVisible(true);
+        });
+        panel.add(assignCrewButton);
+
+
+
         panel.add(createMenuButton("Consultar Asignación de Tripulación"));
         return panel;
     }

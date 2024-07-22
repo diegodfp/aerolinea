@@ -10,6 +10,9 @@ import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.plane.infrastructure.out.PlaneRepository;
 import com.aerolinea.status.domain.service.StatusService;
 import com.aerolinea.status.infrastructure.out.StatusRepository;
+import com.aerolinea.tripCrew.application.TripCrewUseCase;
+import com.aerolinea.tripCrew.infrastructure.in.AssignCrewToTripUi;
+import com.aerolinea.tripCrew.infrastructure.out.TripCrewRepository;
 //  import com.aerolinea.users.application.UserUseCase;
 import com.aerolinea.users.domain.service.UserLoginUseCase;
 import com.aerolinea.users.domain.service.UserService;
@@ -28,5 +31,7 @@ public class Main {
         StatusService statusService = new StatusRepository();
         MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService, modelService, statusService);
         mainWindow.showMainUi();
+
+
     }
 }
