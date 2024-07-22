@@ -8,6 +8,7 @@ import com.aerolinea.airline.domain.service.AirlineService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.users.domain.entity.User;
 import com.aerolinea.users.domain.service.UserLoginUseCase;
 import com.aerolinea.users.domain.service.UserService;
@@ -20,17 +21,18 @@ public class SignInUi {
     private final AirlineService airlineService;
     private final ModelService modelService;
     private final StatusService statusService;
-
+    private final TripCrewService tripCrewService;
     
 
     public SignInUi(UserService userService, UserLoginUseCase userLoginUseCase, PlaneService planeService,
-            AirlineService airlineService, ModelService modelService, StatusService statusService) {
+            AirlineService airlineService, ModelService modelService, StatusService statusService, TripCrewService tripCrewService) {
         this.userService = userService;
         this.userLoginUseCase = userLoginUseCase;
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.modelService = modelService;
         this.statusService = statusService;
+        this.tripCrewService = tripCrewService;
     }
 
     public void showSignIn() {
@@ -121,7 +123,7 @@ public class SignInUi {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             frame.dispose(); // Cerrar la ventana actual correctamente
-                            MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService, statusService); // Crear instancia de MainUi
+                            MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService, statusService, tripCrewService); // Crear instancia de MainUi
                             mainUi.showMainUi(); // Mostrar la ventana principal
                         }
                     });
@@ -136,7 +138,7 @@ public class SignInUi {
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose(); // Cerrar la ventana actual
-                MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService, statusService); // Crear instancia de MainUi
+                MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService, statusService, tripCrewService); // Crear instancia de MainUi
                 mainUi.showMainUi(); // Mostrar la ventana principal
             }
         });

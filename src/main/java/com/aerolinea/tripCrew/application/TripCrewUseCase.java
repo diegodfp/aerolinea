@@ -30,4 +30,6 @@ public class TripCrewUseCase {
         return tripCrewService.getAllFlightConnections();
     }
 
+
+
 }

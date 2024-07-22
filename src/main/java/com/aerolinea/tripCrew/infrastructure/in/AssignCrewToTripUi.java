@@ -4,15 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import com.aerolinea.employee.domain.entity.Employee;
 import com.aerolinea.tripCrew.domain.entity.TripConnectionInfo;
 import com.aerolinea.tripCrew.domain.service.TripCrewService;
 
-public class AssignCrewToTripUi  extends JPanel {
+public class AssignCrewToTripUi {
     private TripCrewService tripCrewService;
 
+    private JFrame frame;
     private JComboBox<String> tripConnectionComboBox;
     private JComboBox<String> employeeComboBox;
     private JButton assignButton;
@@ -22,13 +24,18 @@ public class AssignCrewToTripUi  extends JPanel {
         this.tripCrewService = tripCrewService;
     }
 
+    public void showAssignCrewToTripUi() {
+        frame = new JFrame("Assign Crew to Trip");
+        frame.setSize(550, 250);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
 
-    private void initializeUi() {
-        setLayout(null);
+        JPanel panel = new JPanel(null);
+        frame.add(panel);
 
         JLabel tripConnectionLabel = new JLabel("Select Trip Connection:");
         tripConnectionLabel.setBounds(20, 20, 160, 25);
-        add(tripConnectionLabel);
+        panel.add(tripConnectionLabel);
 
         tripConnectionComboBox = new JComboBox<>();
         tripConnectionComboBox.setBounds(200, 20, 300, 25);
@@ -42,23 +49,23 @@ public class AssignCrewToTripUi  extends JPanel {
                 return component;
             }
         });
-        add(tripConnectionComboBox);
+        panel.add(tripConnectionComboBox);
 
         JLabel employeeLabel = new JLabel("Select Employee:");
         employeeLabel.setBounds(20, 60, 160, 25);
-        add(employeeLabel);
+        panel.add(employeeLabel);
 
         employeeComboBox = new JComboBox<>();
-        employeeComboBox.setBounds(200, 60, 160, 25);
-        add(employeeComboBox);
+        employeeComboBox.setBounds(200, 60, 300, 25);
+        panel.add(employeeComboBox);
 
         assignButton = new JButton("Assign");
-        assignButton.setBounds(20, 100, 340, 25);
-        add(assignButton);
+        assignButton.setBounds(20, 100, 480, 25);
+        panel.add(assignButton);
 
         statusLabel = new JLabel("");
-        statusLabel.setBounds(20, 140, 340, 25);
-        add(statusLabel);
+        statusLabel.setBounds(20, 140, 480, 25);
+        panel.add(statusLabel);
 
         loadTripConnections();
         loadAvailableEmployees();
@@ -66,9 +73,16 @@ public class AssignCrewToTripUi  extends JPanel {
         assignButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                assignCrewToTrip();
+                try {
+                    assignCrewToTrip();
+                } catch (SQLIntegrityConstraintViolationException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
+
+        frame.setVisible(true);
     }
 
     private void loadTripConnections() {
@@ -86,17 +100,37 @@ public class AssignCrewToTripUi  extends JPanel {
         }
     }
 
-    private void assignCrewToTrip() {
+    private void assignCrewToTrip() throws SQLIntegrityConstraintViolationException {
         int selectedConnectionIndex = tripConnectionComboBox.getSelectedIndex();
         if (selectedConnectionIndex >= 0) {
-            int flightConnectionId = tripCrewService.getAllFlightConnections().get(selectedConnectionIndex).getConnectionId();
-        
+            int flightConnectionId = tripCrewService.getAllFlightConnections().get(selectedConnectionIndex)
+                    .getConnectionId();
+    
             String selectedEmployee = (String) employeeComboBox.getSelectedItem();
             if (selectedEmployee != null) {
-                // Extraer la ID del empleado del texto seleccionado
-                String employeeId = selectedEmployee.substring(selectedEmployee.indexOf("(") + 1, selectedEmployee.indexOf(")"));
-                tripCrewService.assignCrewToTrip(employeeId, flightConnectionId);
-                statusLabel.setText("Crew assigned successfully!");
+                String employeeId = selectedEmployee.substring(selectedEmployee.indexOf("(") + 1,
+                        selectedEmployee.indexOf(")"));
+    
+                // Verificar si el empleado ya está asignado a este trayecto
+                if (tripCrewService.isEmployeeAssignedToConnection(employeeId, flightConnectionId)) {
+                    JOptionPane.showMessageDialog(
+                        frame,
+                        "This employee is already assigned to this connection.",
+                        "Duplicate Assignment",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                } else {
+                    try {
+                        tripCrewService.assignCrewToTrip(employeeId, flightConnectionId);
+                        statusLabel.setText("Crew assigned successfully!");
+                        // Actualizar las listas después de una asignación exitosa
+                        loadTripConnections();
+                        loadAvailableEmployees();
+                    } catch (Exception e) {
+                        statusLabel.setText("An error occurred while assigning the crew.");
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 statusLabel.setText("Please select an employee.");
             }

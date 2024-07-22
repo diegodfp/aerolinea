@@ -8,6 +8,7 @@ import com.aerolinea.airline.domain.service.AirlineService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.users.domain.service.UserLoginUseCase;
 import com.aerolinea.users.domain.service.UserService;
 
@@ -19,19 +20,24 @@ public class MainUi {
      private final AirlineService airlineService;
      private final StatusService statusService;
      private final ModelService modelService;
+     private final TripCrewService tripCrewService;
     private JFrame frame; // Variable de instancia
    
 
     
 
+
+
     public MainUi(UserLoginUseCase loginUseCase, UserService userService, PlaneService planeService,
-            AirlineService airlineService,  ModelService modelService, StatusService statusService) {
+            AirlineService airlineService,ModelService modelService,  StatusService statusService,
+            TripCrewService tripCrewService) {
         this.loginUseCase = loginUseCase;
         this.userService = userService;
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.statusService = statusService;
         this.modelService = modelService;
+        this.tripCrewService = tripCrewService;
     }
 
     public void showMainUi() {
@@ -86,13 +92,13 @@ public class MainUi {
     }
 
     private void showRegisterForm() {
-        SignInUi signInUi = new SignInUi(userService, loginUseCase, planeService, airlineService, modelService, statusService);
+        SignInUi signInUi = new SignInUi(userService, loginUseCase, planeService, airlineService, modelService, statusService, tripCrewService);
         signInUi.showSignIn();
     }
 
     private void showLoginForm() {
         // Crear y mostrar el formulario de login
-        LoginUi loginUi = new LoginUi(loginUseCase, planeService, airlineService , modelService, statusService);
+        LoginUi loginUi = new LoginUi(loginUseCase, planeService, airlineService , modelService, statusService, tripCrewService);
         loginUi.showLogin();
     }
 }

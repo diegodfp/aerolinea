@@ -92,4 +92,22 @@ public class TripCrewRepository implements TripCrewService {
         return connections;
     }
 
+    @Override
+    public boolean isEmployeeAssignedToConnection(String employeeId, int connectionId) {
+        String sql = "SELECT COUNT(*) FROM tripCrews WHERE idEmployee = ? and idConnection = ? ";
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, employeeId);
+            statement.setInt(2, connectionId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+
 }

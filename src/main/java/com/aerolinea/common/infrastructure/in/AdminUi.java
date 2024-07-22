@@ -11,6 +11,7 @@ import com.aerolinea.plane.infrastructure.in.PlaneDetailsUi;
 import com.aerolinea.plane.infrastructure.in.PlaneRegisterUi;
 import com.aerolinea.plane.infrastructure.in.PlaneUpdateUi;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.tripCrew.infrastructure.in.AssignCrewToTripUi;
 
 import java.awt.*;
@@ -21,15 +22,15 @@ public class AdminUi {
     private final AirlineService airlineService;
     private final ModelService modelService;
     private final StatusService statusService;
-    
-    
+    private final TripCrewService tripCrewService;
 
     public AdminUi(PlaneService planeService, AirlineService airlineService, ModelService modelService,
-            StatusService statusService) {
+            StatusService statusService, TripCrewService tripCrewService) {
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.modelService = modelService;
         this.statusService = statusService;
+        this.tripCrewService = tripCrewService;
     }
 
     public void showAdminUi() {
@@ -65,7 +66,8 @@ public class AdminUi {
 
         JButton registerButton = createMenuButton("Registrar Avión");
         registerButton.addActionListener(e -> {
-            PlaneRegisterUi planeRegisterUi = new PlaneRegisterUi(planeService, airlineService, modelService, statusService);
+            PlaneRegisterUi planeRegisterUi = new PlaneRegisterUi(planeService, airlineService, modelService,
+                    statusService);
             planeRegisterUi.showPlaneRegisterUi();
         });
         panel.add(registerButton);
@@ -77,20 +79,21 @@ public class AdminUi {
             planeUpdateUi.showPlaneUpdateUi();
         });
         panel.add(updateButton);
-        // 
-        // BOTON DE ELIMINAR 
+        //
+        // BOTON DE ELIMINAR
         JButton deleteButton = createMenuButton("Eliminar Avión");
         deleteButton.addActionListener(e -> {
-           // System.out.println(" eliminar  avion");
+            // System.out.println(" eliminar avion");
             PlaneDeleteUi planeDeleteUi = new PlaneDeleteUi(planeService);
             planeDeleteUi.showPlaneDeleteUi();
         });
         panel.add(deleteButton);
-        // BOTON DE CONSULTAR INFORMACION: 
+        // BOTON DE CONSULTAR INFORMACION:
         JButton getButton = createMenuButton("Consultar Información de Avión");
         getButton.addActionListener(e -> {
-            //System.out.println(" Consultar informacion de avion");
-            PlaneDetailsUi planeDetailsUi = new PlaneDetailsUi(planeService, airlineService, modelService, statusService);
+            // System.out.println(" Consultar informacion de avion");
+            PlaneDetailsUi planeDetailsUi = new PlaneDetailsUi(planeService, airlineService, modelService,
+                    statusService);
             planeDetailsUi.showPlaneDetailsUi();
         });
         panel.add(getButton);
@@ -98,25 +101,17 @@ public class AdminUi {
         return panel;
     }
 
-    private static JPanel createCrewPanel() {
+    private JPanel createCrewPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
     
         JButton assignCrewButton = createMenuButton("Asignar Tripulación");
         assignCrewButton.addActionListener(e -> {
-            // Mostrar la interfaz para asignar tripulación
-            JFrame assignCrewFrame = new JFrame("Asignar Tripulación");
-            assignCrewFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            assignCrewFrame.setSize(600, 300);
-            assignCrewFrame.setLocationRelativeTo(null);
-            AssignCrewToTripUi assignCrewUi = new AssignCrewToTripUi(tripCrewService);
-            assignCrewFrame.add(assignCrewUi);
-            assignCrewFrame.setVisible(true);
+            AssignCrewToTripUi assignCrewToTripUi = new AssignCrewToTripUi(tripCrewService);
+            assignCrewToTripUi.showAssignCrewToTripUi();
         });
         panel.add(assignCrewButton);
-
-
-
+    
         panel.add(createMenuButton("Consultar Asignación de Tripulación"));
         return panel;
     }

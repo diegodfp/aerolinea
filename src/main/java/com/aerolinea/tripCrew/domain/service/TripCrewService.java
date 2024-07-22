@@ -11,4 +11,5 @@ public interface TripCrewService {
     List<TripCrew> getAllAssignedCrews();
     List<Employee> getAvailableEmployees();
     List<TripConnectionInfo> getAllFlightConnections();
+    boolean isEmployeeAssignedToConnection(String employeeId, int connectionId);
 }
