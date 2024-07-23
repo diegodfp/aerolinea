@@ -3,6 +3,11 @@ package com.aerolinea.common.infrastructure.in;
 import javax.swing.*;
 
 import com.aerolinea.airline.domain.service.AirlineService;
+import com.aerolinea.airport.domain.service.AirportService;
+import com.aerolinea.airport.infrastructure.in.AirportRegisterUi;
+import com.aerolinea.airport.infrastructure.in.AirportUpdateUi;
+import com.aerolinea.city.domain.service.CityService;
+import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.model.domain.service.ModelService;
 //import com.aerolinea.plane.application.PlaneUseCase;
 import com.aerolinea.plane.domain.service.PlaneService;
@@ -13,6 +18,7 @@ import com.aerolinea.plane.infrastructure.in.PlaneUpdateUi;
 import com.aerolinea.status.domain.service.StatusService;
 import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.tripCrew.infrastructure.in.AssignCrewToTripUi;
+import com.aerolinea.tripCrew.infrastructure.in.DetailsCrewToTripUi;
 
 import java.awt.*;
 
@@ -23,14 +29,21 @@ public class AdminUi {
     private final ModelService modelService;
     private final StatusService statusService;
     private final TripCrewService tripCrewService;
+    private final CountryService countryService;
+    private final CityService cityService;
+    private final AirportService airportService;
 
     public AdminUi(PlaneService planeService, AirlineService airlineService, ModelService modelService,
-            StatusService statusService, TripCrewService tripCrewService) {
+            StatusService statusService, TripCrewService tripCrewService, CountryService countryService,
+            CityService cityService, AirportService airportService) {
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.modelService = modelService;
         this.statusService = statusService;
         this.tripCrewService = tripCrewService;
+        this.countryService = countryService;
+        this.cityService = cityService;
+        this.airportService = airportService;
     }
 
     public void showAdminUi() {
@@ -104,15 +117,21 @@ public class AdminUi {
     private JPanel createCrewPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
-    
+        // BOTON PARA ASIGNAR TRIPULACION
         JButton assignCrewButton = createMenuButton("Asignar Tripulación");
         assignCrewButton.addActionListener(e -> {
             AssignCrewToTripUi assignCrewToTripUi = new AssignCrewToTripUi(tripCrewService);
             assignCrewToTripUi.showAssignCrewToTripUi();
         });
         panel.add(assignCrewButton);
-    
-        panel.add(createMenuButton("Consultar Asignación de Tripulación"));
+        // BOTON DE CONSULTAR TRIPULACION
+        JButton crewDetails = createMenuButton("Consultar Consultar Asignación de Tripulación");
+        crewDetails.addActionListener(e -> {
+            DetailsCrewToTripUi detailsCrewToTrip = new DetailsCrewToTripUi(tripCrewService);
+            detailsCrewToTrip.showDetailsCrewToTripUi();
+        });
+        panel.add(crewDetails);
+        // panel.add(createMenuButton("Consultar Asignación de Tripulación"));
         return panel;
     }
 
@@ -144,10 +163,26 @@ public class AdminUi {
         return panel;
     }
 
-    private static JPanel createAirportPanel() {
+    private JPanel createAirportPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
-        panel.add(createMenuButton("Registrar Aeropuerto"));
+        // boton de crear aeropuerto
+        JButton addAirport = createMenuButton("Registrar Aeropuerto");
+        addAirport.addActionListener(e -> {
+            AirportRegisterUi airportRegisterUi = new AirportRegisterUi(airportService, countryService, cityService);
+            airportRegisterUi.showAirportRegisterUi();
+        });
+        panel.add(addAirport);
+        //
+
+        // boton de consultar aeropuerto
+        JButton getAirport = createMenuButton("Actualizar Informacion de Aeropuero");
+        getAirport.addActionListener(e -> {
+            AirportUpdateUi airportRegisterUi = new AirportUpdateUi(airportService, countryService, cityService);
+            airportRegisterUi.showAirportUpdateUi();
+        });
+        panel.add(getAirport);
+        //
         panel.add(createMenuButton("Consultar Información de Aeropuerto"));
         panel.add(createMenuButton("Actualizar Información de Aeropuerto"));
         panel.add(createMenuButton("Eliminar Aeropuerto"));

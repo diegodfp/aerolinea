@@ -30,6 +30,8 @@ public class TripCrewUseCase {
         return tripCrewService.getAllFlightConnections();
     }
 
-
+    public List<Employee> getAssignedEmployees(int flightConnectionId){
+        return tripCrewService.getAssignedEmployees(flightConnectionId);
+    }
 
 }

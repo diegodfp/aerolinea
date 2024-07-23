@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.aerolinea.airline.domain.service.AirlineService;
+import com.aerolinea.airport.domain.service.AirportService;
+import com.aerolinea.city.domain.service.CityService;
+import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
@@ -22,10 +25,14 @@ public class SignInUi {
     private final ModelService modelService;
     private final StatusService statusService;
     private final TripCrewService tripCrewService;
-    
+    private final CountryService countryService;
+    private final CityService cityService;
+    private final AirportService airportService;
 
     public SignInUi(UserService userService, UserLoginUseCase userLoginUseCase, PlaneService planeService,
-            AirlineService airlineService, ModelService modelService, StatusService statusService, TripCrewService tripCrewService) {
+            AirlineService airlineService, ModelService modelService, StatusService statusService,
+            TripCrewService tripCrewService, CountryService countryService, CityService cityService,
+            AirportService airportService) {
         this.userService = userService;
         this.userLoginUseCase = userLoginUseCase;
         this.planeService = planeService;
@@ -33,6 +40,9 @@ public class SignInUi {
         this.modelService = modelService;
         this.statusService = statusService;
         this.tripCrewService = tripCrewService;
+        this.countryService = countryService;
+        this.cityService = cityService;
+        this.airportService = airportService;
     }
 
     public void showSignIn() {
@@ -123,7 +133,9 @@ public class SignInUi {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             frame.dispose(); // Cerrar la ventana actual correctamente
-                            MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService, statusService, tripCrewService); // Crear instancia de MainUi
+                            MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService,
+                                    modelService, statusService, tripCrewService, countryService, cityService,
+                                    airportService); // Crear instancia de MainUi
                             mainUi.showMainUi(); // Mostrar la ventana principal
                         }
                     });
@@ -138,7 +150,9 @@ public class SignInUi {
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose(); // Cerrar la ventana actual
-                MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService, statusService, tripCrewService); // Crear instancia de MainUi
+                MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService,
+                        statusService, tripCrewService, countryService, cityService, airportService); // Crear instancia
+                                                                                                      // de MainUi
                 mainUi.showMainUi(); // Mostrar la ventana principal
             }
         });
