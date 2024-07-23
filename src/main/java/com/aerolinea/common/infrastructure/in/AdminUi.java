@@ -274,7 +274,6 @@ public class AdminUi {
               });
               panel.add(deleteFlightConnection);
               //
-        panel.add(createMenuButton("Eliminar Escala"));
         return panel;
     }
 
