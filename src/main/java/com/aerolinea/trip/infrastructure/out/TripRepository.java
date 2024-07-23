@@ -15,7 +15,7 @@ public class TripRepository implements TripService {
 
     @Override
     public List<Trip> getAllTrips() {
-        String sql = "SELECT id, name FROM airlines";
+        String sql = "SELECT id, date, price,originAirport ,destinationAirport  FROM trips";
         List<Trip> trips = new ArrayList<>();
 
           try (Connection connection = DatabaseConfig.getConnection();
@@ -27,6 +27,8 @@ public class TripRepository implements TripService {
                 trip.setId(resultSet.getInt("id"));
                 trip.setDate(resultSet.getDate("date"));
                 trip.setPrice(resultSet.getDouble("price"));
+                trip.setOriginAirport(resultSet.getString("originAirport"));
+                trip.setDestinationAirport(resultSet.getString("destinationAirport"));
                 trips.add(trip);
             }
 
@@ -35,5 +37,40 @@ public class TripRepository implements TripService {
         }
         return trips;
     }   
+
+    @Override
+    public void updateTrip(Trip trip, int originalId) {
+        String sql = "UPDATE trips SET date = ?, price = ?, originAirport = ?, destinationAirport = ? WHERE id = ?";
+
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setDate(1, trip.getDate());
+            statement.setDouble(2, trip.getPrice());
+            statement.setString(3, trip.getOriginAirport());
+            statement.setString(4, trip.getDestinationAirport());
+            statement.setInt(5, originalId);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void deleteTrip(int tripId) {
+        String sql = "DELETE FROM trips WHERE id = ?";
+
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, tripId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

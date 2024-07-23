@@ -8,10 +8,12 @@ import com.aerolinea.airline.domain.service.AirlineService;
 import com.aerolinea.airport.domain.service.AirportService;
 import com.aerolinea.city.domain.service.CityService;
 import com.aerolinea.country.domain.service.CountryService;
+import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
 import com.aerolinea.model.domain.service.ModelService;
 //import com.aerolinea.plane.application.PlaneUseCase;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.trip.domain.service.TripService;
 import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.users.domain.service.UserLoginUseCase;
 
@@ -26,13 +28,17 @@ public class LoginUi {
     private final CountryService countryService;
     private final CityService cityService;
     private final AirportService airportService;
-    
+    private final TripService tripService;
+    private final FlightConnectionService flightConnectionService;
+
+
 
 
 
     public LoginUi(UserLoginUseCase loginUseCase, PlaneService planeService, AirlineService airlineService,
             ModelService modelService, StatusService statusService, TripCrewService tripCrewService,
-            CountryService countryService, CityService cityService, AirportService airportService) {
+            CountryService countryService, CityService cityService, AirportService airportService,
+            TripService tripService, FlightConnectionService flightConnectionService) {
         this.loginUseCase = loginUseCase;
         this.planeService = planeService;
         this.airlineService = airlineService;
@@ -42,6 +48,8 @@ public class LoginUi {
         this.countryService = countryService;
         this.cityService = cityService;
         this.airportService = airportService;
+        this.tripService = tripService;
+        this.flightConnectionService = flightConnectionService;
     }
 
     public void showLogin() {
@@ -101,7 +109,7 @@ public class LoginUi {
                     if ("administrador".equals(rol)) {
                         System.out.println(" Ingreso Como Administrador");
                         frame.dispose(); // Cerrar la ventana actual
-                        AdminUi adminUi = new AdminUi(planeService, airlineService, modelService, statusService, tripCrewService, countryService, cityService, airportService); // Crear instancia de AdminUi
+                        AdminUi adminUi = new AdminUi(planeService, airlineService, modelService, statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService); // Crear instancia de AdminUi
                         adminUi.showAdminUi(); // Mostrar la ventana de administrador
                     } else if ("Agente de ventas".equals(rol)) {
                         // Lógica para vista de agente de ventas
