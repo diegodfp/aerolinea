@@ -15,6 +15,8 @@ import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDeleteU
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDetailsUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionUpdateUi;
 import com.aerolinea.flightfares.domain.service.FlightFaresService;
+import com.aerolinea.flightfares.infrastructure.in.FlightFareDeleteUi;
+import com.aerolinea.flightfares.infrastructure.in.FlightFareDetailsUi;
 import com.aerolinea.flightfares.infrastructure.in.FlightFareRegisterUi;
 import com.aerolinea.flightfares.infrastructure.in.FlightFareUpdateUi;
 import com.aerolinea.model.domain.service.ModelService;
@@ -48,7 +50,7 @@ public class AdminUi {
     private final TripService tripService;
     private final FlightConnectionService flightConnectionService;
     private final FlightFaresService flightFaresService;
-
+    
     public AdminUi(PlaneService planeService, AirlineService airlineService, ModelService modelService,
             StatusService statusService, TripCrewService tripCrewService, CountryService countryService,
             CityService cityService, AirportService airportService, TripService tripService,
@@ -302,9 +304,26 @@ public class AdminUi {
             flightFareUpdateUi.showFlightFareUpdateUi();
         });
         panel.add(updateFlightFare);
-        //;
+        //
 
-        panel.add(createMenuButton("Eliminar Tarifa de Vuelo"));
+        // boton de Eliminar Tarifa de Vuelo
+        JButton deleteFlightFare = createMenuButton("Eliminar Tarifa de Vuelo");
+        deleteFlightFare.addActionListener(e -> {
+            FlightFareDeleteUi flightFareDeleteUi = new FlightFareDeleteUi(flightFaresService);
+            flightFareDeleteUi.showFlightFareDeleteUi();
+        });
+        panel.add(deleteFlightFare);
+        //
+        // Falta boton de consulta!
+        // boton de Consultar Tarifa de Vuelo
+        JButton detailsFlightFare = createMenuButton("Consultar Tarifas de Vuelo");
+        detailsFlightFare.addActionListener(e -> {
+            FlightFareDetailsUi flightFareDetailsUi = new FlightFareDetailsUi(flightFaresService);
+            flightFareDetailsUi.showFlightFareDetailsUi();
+        });
+        panel.add(detailsFlightFare);
+        //
+
         return panel;
     }
 
