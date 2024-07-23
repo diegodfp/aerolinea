@@ -12,6 +12,8 @@ import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.country.infrastructure.out.CountryRepositoriy;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
 import com.aerolinea.flightConnections.infrastructure.out.FlightConnectionRepository;
+import com.aerolinea.flightfares.domain.service.FlightFaresService;
+import com.aerolinea.flightfares.infrastructure.out.FlightFaresRepository;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.model.infrastructure.out.ModelRepository;
 import com.aerolinea.plane.domain.service.PlaneService;
@@ -46,7 +48,11 @@ public class Main {
         AirportService airportService = new AirportRepository();
         TripService tripService = new TripRepository();
         FlightConnectionService flightConnectionService = new FlightConnectionRepository();
-        MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService, modelService ,statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService );
+        FlightFaresService flightFaresService = new FlightFaresRepository();
+        
+        MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService,
+         modelService ,statusService, tripCrewService, countryService, cityService, airportService,
+          tripService, flightConnectionService , flightFaresService);
         mainWindow.showMainUi();
 
 

@@ -9,6 +9,7 @@ import com.aerolinea.airport.domain.service.AirportService;
 import com.aerolinea.city.domain.service.CityService;
 import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightfares.domain.service.FlightFaresService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
@@ -30,16 +31,17 @@ public class SignInUi {
     private final CountryService countryService;
     private final CityService cityService;
     private final AirportService airportService;
-    private final TripService tripService; 
+    private final TripService tripService;
     private final FlightConnectionService flightConnectionService;
+    private final FlightFaresService flightFaresService;
 
-    
 
 
     public SignInUi(UserService userService, UserLoginUseCase userLoginUseCase, PlaneService planeService,
             AirlineService airlineService, ModelService modelService, StatusService statusService,
             TripCrewService tripCrewService, CountryService countryService, CityService cityService,
-            AirportService airportService, TripService tripService, FlightConnectionService flightConnectionService) {
+            AirportService airportService, TripService tripService, FlightConnectionService flightConnectionService,
+            FlightFaresService flightFaresService) {
         this.userService = userService;
         this.userLoginUseCase = userLoginUseCase;
         this.planeService = planeService;
@@ -52,6 +54,7 @@ public class SignInUi {
         this.airportService = airportService;
         this.tripService = tripService;
         this.flightConnectionService = flightConnectionService;
+        this.flightFaresService = flightFaresService;
     }
 
     public void showSignIn() {
@@ -144,7 +147,7 @@ public class SignInUi {
                             frame.dispose(); // Cerrar la ventana actual correctamente
                             MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService,
                                     modelService, statusService, tripCrewService, countryService, cityService,
-                                    airportService, tripService, flightConnectionService); // Crear instancia de MainUi
+                                    airportService, tripService, flightConnectionService,  flightFaresService); // Crear instancia de MainUi
                             mainUi.showMainUi(); // Mostrar la ventana principal
                         }
                     });
@@ -160,8 +163,9 @@ public class SignInUi {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose(); // Cerrar la ventana actual
                 MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService,
-                        statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService); // Crear instancia
-                                                                                                      // de MainUi
+                        statusService, tripCrewService, countryService, cityService, airportService, tripService,
+                        flightConnectionService,  flightFaresService); // Crear instancia
+                // de MainUi
                 mainUi.showMainUi(); // Mostrar la ventana principal
             }
         });
