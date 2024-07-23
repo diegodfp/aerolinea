@@ -5,9 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.aerolinea.airline.domain.service.AirlineService;
+import com.aerolinea.airport.domain.service.AirportService;
+import com.aerolinea.city.domain.service.CityService;
+import com.aerolinea.country.domain.service.CountryService;
+import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
+import com.aerolinea.trip.domain.service.TripService;
 import com.aerolinea.tripCrew.domain.service.TripCrewService;
 import com.aerolinea.users.domain.service.UserLoginUseCase;
 import com.aerolinea.users.domain.service.UserService;
@@ -18,26 +23,34 @@ public class MainUi {
      private final UserService userService;
      private final PlaneService planeService;
      private final AirlineService airlineService;
-     private final StatusService statusService;
      private final ModelService modelService;
+     private final StatusService statusService;
      private final TripCrewService tripCrewService;
+     private final CountryService countryService;
+     private final CityService cityService;
+     private final AirportService airportService;
+     private final TripService tripService;
+     private final FlightConnectionService flightConnectionService;
     private JFrame frame; // Variable de instancia
    
 
-    
-
-
 
     public MainUi(UserLoginUseCase loginUseCase, UserService userService, PlaneService planeService,
-            AirlineService airlineService,ModelService modelService,  StatusService statusService,
-            TripCrewService tripCrewService) {
+            AirlineService airlineService, ModelService modelService, StatusService statusService,
+            TripCrewService tripCrewService, CountryService countryService, CityService cityService,
+            AirportService airportService, TripService tripService, FlightConnectionService flightConnectionService) {
         this.loginUseCase = loginUseCase;
         this.userService = userService;
         this.planeService = planeService;
         this.airlineService = airlineService;
-        this.statusService = statusService;
         this.modelService = modelService;
+        this.statusService = statusService;
         this.tripCrewService = tripCrewService;
+        this.countryService = countryService;
+        this.cityService = cityService;
+        this.airportService = airportService;
+        this.tripService = tripService;
+        this.flightConnectionService = flightConnectionService;
     }
 
     public void showMainUi() {
@@ -92,13 +105,13 @@ public class MainUi {
     }
 
     private void showRegisterForm() {
-        SignInUi signInUi = new SignInUi(userService, loginUseCase, planeService, airlineService, modelService, statusService, tripCrewService);
+        SignInUi signInUi = new SignInUi(userService, loginUseCase, planeService, airlineService, modelService, statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService);
         signInUi.showSignIn();
     }
 
     private void showLoginForm() {
         // Crear y mostrar el formulario de login
-        LoginUi loginUi = new LoginUi(loginUseCase, planeService, airlineService , modelService, statusService, tripCrewService);
+        LoginUi loginUi = new LoginUi(loginUseCase, planeService, airlineService , modelService, statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService);
         loginUi.showLogin();
     }
 }

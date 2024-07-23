@@ -3,13 +3,23 @@ package com.aerolinea;
 
 import com.aerolinea.airline.domain.service.AirlineService;
 import com.aerolinea.airline.infrastructure.out.AirlineRepository;
+import com.aerolinea.airport.domain.service.AirportService;
+import com.aerolinea.airport.infrastructure.out.AirportRepository;
+import com.aerolinea.city.domain.service.CityService;
+import com.aerolinea.city.infrastructure.out.CityRepository;
 import com.aerolinea.common.infrastructure.in.MainUi;
+import com.aerolinea.country.domain.service.CountryService;
+import com.aerolinea.country.infrastructure.out.CountryRepositoriy;
+import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightConnections.infrastructure.out.FlightConnectionRepository;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.model.infrastructure.out.ModelRepository;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.plane.infrastructure.out.PlaneRepository;
 import com.aerolinea.status.domain.service.StatusService;
 import com.aerolinea.status.infrastructure.out.StatusRepository;
+import com.aerolinea.trip.domain.service.TripService;
+import com.aerolinea.trip.infrastructure.out.TripRepository;
 //import com.aerolinea.tripCrew.application.TripCrewUseCase;
 import com.aerolinea.tripCrew.domain.service.TripCrewService;
 //import com.aerolinea.tripCrew.infrastructure.in.AssignCrewToTripUi;
@@ -31,7 +41,12 @@ public class Main {
         ModelService modelService = new ModelRepository();
         StatusService statusService = new StatusRepository();
         TripCrewService tripCrewService = new TripCrewRepository();
-        MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService, modelService ,statusService, tripCrewService);
+        CountryService countryService = new CountryRepositoriy();
+        CityService cityService = new CityRepository();
+        AirportService airportService = new AirportRepository();
+        TripService tripService = new TripRepository();
+        FlightConnectionService flightConnectionService = new FlightConnectionRepository();
+        MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService, modelService ,statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService );
         mainWindow.showMainUi();
 
 

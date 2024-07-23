@@ -108,6 +108,32 @@ public class TripCrewRepository implements TripCrewService {
         }
         return false;
     }
+
+    @Override
+    public List<Employee> getAssignedEmployees(int flightConnectionId) {
+        List<Employee> employees = new ArrayList<>();
+        String sql = "SELECT id, name FROM employees e " +
+                     "JOIN tripCrews tp ON tp.idEmployee = e.id " +
+                     "WHERE tp.idConnection = ?";
+        
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            
+            statement.setInt(1, flightConnectionId);  // Mueve esta línea dentro del try-with-resources
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Employee employee = new Employee();
+                    employee.setId(resultSet.getString("id"));
+                    employee.setName(resultSet.getString("name"));
+                    employees.add(employee);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
+    
     
 
 }

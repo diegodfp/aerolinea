@@ -17,4 +17,12 @@ public class TripUseCase {
         return tripService.getAllTrips();
     }
 
+    public void updateTrip(Trip trip, int originalId) {
+        tripService.updateTrip(trip, originalId);
+    }
+
+    public void deleteTrip(int tripId) {
+        tripService.deleteTrip(tripId);
+    }
+
 }
