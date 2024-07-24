@@ -10,8 +10,8 @@ import com.aerolinea.country.domain.entity.Country;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -173,14 +173,14 @@ public class ClientUi {
         destinationAirportComboBox.setModel(new DefaultComboBoxModel<>(getAirportNames(destinationCityId).toArray(new String[0])));
     }
 
-    private boolean isValidDateFormat(String date) {
-        try {
-            LocalDate.parse(date);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
+    // private boolean isValidDateFormat(String date) {
+    //     try {
+    //         LocalDate.parse(date);
+    //         return true;
+    //     } catch (DateTimeParseException e) {
+    //         return false;
+    //     }
+    // }
 
     private void searchFlights() {
         // Obtiene el nombre de los aeropuertos seleccionados
@@ -208,7 +208,7 @@ public class ClientUi {
         // Actualiza el JComboBox con los resultados encontrados
         updateResultsComboBox(matchingFlights);
     }
-    
+
     private String getAirportIdByName(String airportName) {
         return airportService.getAllAirports().stream()
             .filter(airport -> airport.getName().equals(airportName))
