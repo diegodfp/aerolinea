@@ -15,6 +15,10 @@ import com.aerolinea.customer.infrastructure.in.CustomerDetailsUi;
 import com.aerolinea.customer.infrastructure.in.CustomerRegisterUi;
 import com.aerolinea.customer.infrastructure.in.CustomerUpdateUi;
 import com.aerolinea.documenttype.domain.service.DocumenttypeService;
+import com.aerolinea.documenttype.infrastructure.in.DocumenttypeDeleteUi;
+import com.aerolinea.documenttype.infrastructure.in.DocumenttypeDetailsUi;
+import com.aerolinea.documenttype.infrastructure.in.DocumenttypeRegisterUi;
+import com.aerolinea.documenttype.infrastructure.in.DocumenttypeUpdateUi;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDeleteUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDetailsUi;
@@ -315,14 +319,39 @@ public class AdminUi {
         return panel;
     }
 
-    private static JPanel createDocumentPanel() {
+    private JPanel createDocumentPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
-        panel.add(createMenuButton("Registrar Tipo de Documento"));
-        panel.add(createMenuButton("Consultar Tipo de Documento"));
-        panel.add(createMenuButton("Actualizar Tipo de Documento"));
-        panel.add(createMenuButton("Eliminar Tipo de Documento"));
-        return panel;
+
+        JButton registerButton = createMenuButton("Registrar Tipo de Documento");
+        registerButton.addActionListener(e -> {
+            DocumenttypeRegisterUi documenttypeRegisterUi = new DocumenttypeRegisterUi(documenttypeService);
+            documenttypeRegisterUi.showDocumenttypeRegisterUi();
+        });
+        panel.add(registerButton);
+
+        JButton consultButton = createMenuButton("Consultar Tipo de Documento");
+        consultButton.addActionListener(e -> {
+            DocumenttypeDetailsUi documenttypeDetailsUi = new DocumenttypeDetailsUi(documenttypeService);
+            documenttypeDetailsUi.showDocumenttypeDetailsUi();
+        });
+        panel.add(consultButton);
+
+        JButton updateButton = createMenuButton("Actualizar Tipo de Documento");
+        updateButton.addActionListener(e -> {
+            DocumenttypeUpdateUi documenttypeUpdateUi = new DocumenttypeUpdateUi(documenttypeService);
+            documenttypeUpdateUi.showDocumenttypeUpdateUi();
+        });
+        panel.add(updateButton);
+
+        JButton deleteButton = createMenuButton("Eliminar Tipo de Documento");
+        deleteButton.addActionListener(e -> {
+            DocumenttypeDeleteUi documenttypeDeleteUi = new DocumenttypeDeleteUi(documenttypeService);
+            documenttypeDeleteUi.showDocumenttypeDeleteUi();
+        });
+        panel.add(deleteButton);
+
+    return panel;
     }
 
     private static JButton createMenuButton(String buttonText) {
