@@ -15,7 +15,7 @@ import com.aerolinea.documenttype.domain.service.DocumenttypeService;
 public class DocumenttypeRepository implements DocumenttypeService{
     @Override
     public List<Documenttype> getAllDocumenttypes() {
-       String sql = "SELECT id, name FROM documenttype";
+       String sql = "SELECT id, name FROM documentTypes";
         List<Documenttype> statuses = new ArrayList<>();
 
         try (Connection connection = DatabaseConfig.getConnection();
