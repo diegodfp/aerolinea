@@ -29,7 +29,6 @@ CREATE TABLE customers(
     name VARCHAR(30) NOT NULL,
     age INT NOT NULL,
     idDocType INT,
-    documentNumber VARCHAR(30), -- Añadir este campo
     FOREIGN KEY (idDocType) REFERENCES documentTypes(id) ON DELETE SET NULL
 );
 
@@ -182,7 +181,8 @@ id INT PRIMARY KEY AUTO_INCREMENT,
  FOREIGN KEY (departureAirport) REFERENCES airports(id), 
  FOREIGN KEY (arrivalAirport) REFERENCES airports(id) 
  );
-
+ use aerolinea;
+select * from flightConnections;
 CREATE TABLE tripCrews(
     idEmployee VARCHAR(20),
     idConnection INT,
@@ -208,7 +208,8 @@ INSERT into rol (nombre) VALUES
 
 inserT into usuario ( nombre, email, password, rol_id) VALUES
 	("diego","diegodfp.fly@gmail.com","123", 1);
-
+inserT into usuario ( nombre, email, password, rol_id) VALUES
+	("cliente","diegodfp.fly@gmail.com","123", 4);
 INSERT INTO manufacturers (name) VALUES
   ('Airbus'),
   ('Boeing'),
@@ -290,12 +291,9 @@ INSERT INTO documentTypes (name) VALUES
     ('Tarjeta de Residencia');
 
 -- Insertar clientes
-INSERT INTO customers (id, name, age, idDocType, documentNumber) VALUES 
-('CUST001', 'John Doe', 30, 1, '123456789'),
-('CUST002', 'Jane Smith', 25, 2, '987654321'),
-('CUST003', 'Michael Johnson', 40, 1, '456789123'),
-('CUST004', 'Emily Davis', 22, 3, '321654987'),
-('CUST005', 'William Brown', 35, 2, '789123456');
+INSERT INTO customers (id, name, age, idDocType) VALUES
+    ('C12345', 'Juan Pérez', 30, (SELECT id FROM documentTypes WHERE name = 'DNI')),
+    ('C67890', 'María López', 25, (SELECT id FROM documentTypes WHERE name = 'Pasaporte'));
 
 -- Insertar tarifas de vuelo
 INSERT INTO flightFares (description, details, value) VALUES
@@ -465,5 +463,42 @@ INSERT INTO flightConnections (numConnection, idTrip, idPlane, departureAirport,
 
 -- Vuelo 10: JFK - MEX (directo)
 ('FC014', 10, 5, 'JFK', 'MEX', '2024-11-01 09:00:00', '2024-11-01 13:00:00', 1, 'DIRECT');
+
+-- MAS REGISTROS DE LA TABLA FLIGHCONECTIONS --
+-- No olvides añadir los correspondientes registros en la tabla `trips` para estos nuevos vuelos
+INSERT INTO trips (id, date, price, originAirport, destinationAirport) VALUES
+(11, '2024-08-20', 450.00, 'EZE', 'GRU'),
+(12, '2024-08-22', 450.00, 'GRU', 'EZE'),
+(13, '2024-09-05', 350.00, 'JFK', 'LAX'),
+(14, '2024-09-10', 350.00, 'LAX', 'JFK'),
+(15, '2024-10-01', 300.00, 'MEX', 'BOG'); 
+
+INSERT INTO trips (id, date, price, originAirport, destinationAirport) VALUES
+(16, '2024-08-25', 480.00, 'EZE', 'GRU'),
+(17, '2024-08-27', 470.00, 'GRU', 'EZE'),
+(18, '2024-09-15', 360.00, 'JFK', 'LAX'),
+(19, '2024-09-20', 355.00, 'LAX', 'JFK'),
+(20, '2024-10-10', 310.00, 'MEX', 'BOG');
+INSERT INTO flightConnections (numConnection, idTrip, idPlane, departureAirport, arrivalAirport, departureTime, arrivalTime, orderNumber, connectionType) VALUES
+-- Vuelo EZE - GRU (otro día)
+('FC015', 11, 1, 'EZE', 'GRU', '2024-08-20 10:00:00', '2024-08-20 13:00:00', 1, 'DIRECT'),
+
+-- Vuelo GRU - EZE (vuelta)
+('FC016', 12, 2, 'GRU', 'EZE', '2024-08-22 14:00:00', '2024-08-22 17:00:00', 1, 'DIRECT'),
+
+-- Vuelo JFK - LAX
+('FC017', 13, 3, 'JFK', 'LAX', '2024-09-05 08:00:00', '2024-09-05 11:00:00', 1, 'DIRECT'),
+
+-- Vuelo LAX - JFK (vuelta)
+('FC018', 14, 4, 'LAX', 'JFK', '2024-09-10 13:00:00', '2024-09-10 21:00:00', 1, 'DIRECT'),
+
+-- Vuelo MEX - BOG
+('FC019', 15, 5, 'MEX', 'BOG', '2024-10-01 09:00:00', '2024-10-01 14:00:00', 1, 'DIRECT');
+INSERT INTO flightConnections (numConnection, idTrip, idPlane, departureAirport, arrivalAirport, departureTime, arrivalTime, orderNumber, connectionType) VALUES
+('FC020', 16, 1, 'EZE', 'GRU', '2024-08-25 11:00:00', '2024-08-25 14:00:00', 1, 'DIRECT'),
+('FC021', 17, 2, 'GRU', 'EZE', '2024-08-27 15:00:00', '2024-08-27 18:00:00', 1, 'DIRECT'),
+('FC022', 18, 3, 'JFK', 'LAX', '2024-09-15 09:00:00', '2024-09-15 12:00:00', 1, 'DIRECT'),
+('FC023', 19, 4, 'LAX', 'JFK', '2024-09-20 14:00:00', '2024-09-20 22:00:00', 1, 'DIRECT'),
+('FC024', 20, 5, 'MEX', 'BOG', '2024-10-10 10:00:00', '2024-10-10 15:00:00', 1, 'DIRECT');
 
 
