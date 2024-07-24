@@ -43,7 +43,11 @@ Para más detalles, visita la [documentación](/docs/).
 - **Lenguaje de Programación:** Java
 - **Base de Datos:** MySQL
 - **Control de Versiones:** Git
+##Dependencias
+###El proyecto utiliza las siguientes dependencias principales:
 
+- **MySQL Connector/J (versión 8.4.0):** Conector JDBC para MySQL, que permite la conexión y operaciones con la base de datos MySQL.
+- **JCalendar (versión 1.4):** Biblioteca que proporciona componentes de interfaz de usuario para la selección de fechas y manejo de calendarios.
 
 ## Estructura del Proyecto 
 ```css
