@@ -11,6 +11,7 @@ import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.customer.domain.service.CustomerService;
 import com.aerolinea.documenttype.domain.service.DocumenttypeService;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightfares.domain.service.FlightFaresService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
@@ -35,15 +36,19 @@ public class MainUi {
      private final FlightConnectionService flightConnectionService;
      private final CustomerService customerService;
      private final DocumenttypeService documenttypeService;
+     private final FlightFaresService flightFaresService;
     private JFrame frame; // Variable de instancia
    
+
+
     
 
     public MainUi(UserLoginUseCase loginUseCase, UserService userService, PlaneService planeService,
             AirlineService airlineService, ModelService modelService, StatusService statusService,
             TripCrewService tripCrewService, CountryService countryService, CityService cityService,
             AirportService airportService, TripService tripService, FlightConnectionService flightConnectionService,
-            CustomerService customerService, DocumenttypeService documenttypeService) {
+            CustomerService customerService, DocumenttypeService documenttypeService,
+            FlightFaresService flightFaresService) {
         this.loginUseCase = loginUseCase;
         this.userService = userService;
         this.planeService = planeService;
@@ -58,6 +63,7 @@ public class MainUi {
         this.flightConnectionService = flightConnectionService;
         this.customerService = customerService;
         this.documenttypeService = documenttypeService;
+        this.flightFaresService = flightFaresService;
     }
 
     public void showMainUi() {
@@ -112,13 +118,17 @@ public class MainUi {
     }
 
     private void showRegisterForm() {
-        SignInUi signInUi = new SignInUi(userService, loginUseCase, planeService, airlineService, modelService, statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService, customerService, documenttypeService);
+        SignInUi signInUi = new SignInUi(userService, loginUseCase, planeService, airlineService, 
+        modelService, statusService, tripCrewService, countryService, cityService, airportService, 
+        tripService, flightConnectionService, customerService, documenttypeService, flightFaresService);
         signInUi.showSignIn();
     }
 
     private void showLoginForm() {
         // Crear y mostrar el formulario de login
-        LoginUi loginUi = new LoginUi(loginUseCase, planeService, airlineService , modelService, statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService, customerService,documenttypeService);
+        LoginUi loginUi = new LoginUi(loginUseCase, planeService, airlineService , modelService, 
+        statusService, tripCrewService, countryService, cityService, airportService, tripService, 
+        flightConnectionService, customerService, documenttypeService, flightFaresService);
         loginUi.showLogin();
     }
 }

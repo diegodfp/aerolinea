@@ -11,6 +11,7 @@ import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.customer.domain.service.CustomerService;
 import com.aerolinea.documenttype.domain.service.DocumenttypeService;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightfares.domain.service.FlightFaresService;
 import com.aerolinea.model.domain.service.ModelService;
 import com.aerolinea.plane.domain.service.PlaneService;
 import com.aerolinea.status.domain.service.StatusService;
@@ -32,10 +33,12 @@ public class SignInUi {
     private final CountryService countryService;
     private final CityService cityService;
     private final AirportService airportService;
-    private final TripService tripService; 
+    private final TripService tripService;
     private final FlightConnectionService flightConnectionService;
     private final CustomerService customerService;
     private final DocumenttypeService documenttypeService;
+    private final FlightFaresService flightFaresService;
+
 
     
 
@@ -43,7 +46,8 @@ public class SignInUi {
             AirlineService airlineService, ModelService modelService, StatusService statusService,
             TripCrewService tripCrewService, CountryService countryService, CityService cityService,
             AirportService airportService, TripService tripService, FlightConnectionService flightConnectionService,
-            CustomerService customerService, DocumenttypeService documenttypeService) {
+            CustomerService customerService, DocumenttypeService documenttypeService,
+            FlightFaresService flightFaresService) {
         this.userService = userService;
         this.userLoginUseCase = userLoginUseCase;
         this.planeService = planeService;
@@ -58,6 +62,7 @@ public class SignInUi {
         this.flightConnectionService = flightConnectionService;
         this.customerService = customerService;
         this.documenttypeService = documenttypeService;
+        this.flightFaresService = flightFaresService;
     }
 
     public void showSignIn() {
@@ -150,7 +155,7 @@ public class SignInUi {
                             frame.dispose(); // Cerrar la ventana actual correctamente
                             MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService,
                                     modelService, statusService, tripCrewService, countryService, cityService,
-                                    airportService, tripService, flightConnectionService, customerService, documenttypeService); // Crear instancia de MainUi
+                                    airportService, tripService, flightConnectionService, customerService, documenttypeService, flightFaresService); // Crear instancia de MainUi
                             mainUi.showMainUi(); // Mostrar la ventana principal
                         }
                     });
@@ -166,7 +171,8 @@ public class SignInUi {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose(); // Cerrar la ventana actual
                 MainUi mainUi = new MainUi(userLoginUseCase, userService, planeService, airlineService, modelService,
-                        statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService, customerService,documenttypeService); // Crear instancia
+                        statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService,
+                        customerService, documenttypeService, flightFaresService); // Crear instancia
                                                                                                       // de MainUi
                 mainUi.showMainUi(); // Mostrar la ventana principal
             }

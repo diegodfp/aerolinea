@@ -11,6 +11,7 @@ import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.customer.domain.service.CustomerService;
 import com.aerolinea.documenttype.domain.service.DocumenttypeService;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightfares.domain.service.FlightFaresService;
 import com.aerolinea.model.domain.service.ModelService;
 //import com.aerolinea.plane.application.PlaneUseCase;
 import com.aerolinea.plane.domain.service.PlaneService;
@@ -34,13 +35,14 @@ public class LoginUi {
     private final FlightConnectionService flightConnectionService;
     private final CustomerService customerService;
     private final DocumenttypeService documenttypeService;
+    private final FlightFaresService flightFaresService;
 
 
     public LoginUi(UserLoginUseCase loginUseCase, PlaneService planeService, AirlineService airlineService,
             ModelService modelService, StatusService statusService, TripCrewService tripCrewService,
             CountryService countryService, CityService cityService, AirportService airportService,
             TripService tripService, FlightConnectionService flightConnectionService, CustomerService customerService,
-            DocumenttypeService documenttypeService) {
+            DocumenttypeService documenttypeService, FlightFaresService flightFaresService) {
         this.loginUseCase = loginUseCase;
         this.planeService = planeService;
         this.airlineService = airlineService;
@@ -54,6 +56,7 @@ public class LoginUi {
         this.flightConnectionService = flightConnectionService;
         this.customerService = customerService;
         this.documenttypeService = documenttypeService;
+        this.flightFaresService = flightFaresService;
     }
 
     public void showLogin() {
@@ -113,14 +116,18 @@ public class LoginUi {
                     if ("administrador".equals(rol)) {
                         System.out.println(" Ingreso Como Administrador");
                         frame.dispose(); // Cerrar la ventana actual
-                        AdminUi adminUi = new AdminUi(planeService, airlineService, modelService, statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService, customerService, documenttypeService); // Crear instancia de AdminUi
+                        AdminUi adminUi = new AdminUi(planeService, airlineService, modelService, statusService, tripCrewService, 
+                        countryService, cityService, airportService, tripService, flightConnectionService, customerService, documenttypeService, flightFaresService); // Crear instancia de AdminUi
                         adminUi.showAdminUi(); // Mostrar la ventana de administrador
                     } else if ("Agente de ventas".equals(rol)) {
                         // Lógica para vista de agente de ventas
                     } else if ("Técnico de mantenimiento".equals(rol)) {
                         // Lógica para vista de técnico de mantenimiento
-                    } else if ("Cliente".equals(rol)) {
-                        // Lógica para vista de cliente
+                    } else if ("cliente".equals(rol)) {
+                        System.out.println(" Ingreso Como cliente");
+                        frame.dispose(); // Cerrar la ventana actual
+                        ClientUi clientUi = new ClientUi(flightConnectionService, airportService, cityService, countryService); // Crear instancia de AdminUi
+                        clientUi.showSearchFlightsUi(); // Mostrar la ventana de cliente
                     }
                 } else {
                     messageLabel.setText("Usuario o contraseña incorrectos.");

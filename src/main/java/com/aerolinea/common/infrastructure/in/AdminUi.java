@@ -20,9 +20,15 @@ import com.aerolinea.documenttype.infrastructure.in.DocumenttypeDetailsUi;
 import com.aerolinea.documenttype.infrastructure.in.DocumenttypeRegisterUi;
 import com.aerolinea.documenttype.infrastructure.in.DocumenttypeUpdateUi;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightConnections.infrastructure.in.AssignPlaneToTripUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDeleteUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDetailsUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionUpdateUi;
+import com.aerolinea.flightfares.domain.service.FlightFaresService;
+import com.aerolinea.flightfares.infrastructure.in.FlightFareDeleteUi;
+import com.aerolinea.flightfares.infrastructure.in.FlightFareDetailsUi;
+import com.aerolinea.flightfares.infrastructure.in.FlightFareRegisterUi;
+import com.aerolinea.flightfares.infrastructure.in.FlightFareUpdateUi;
 import com.aerolinea.model.domain.service.ModelService;
 //import com.aerolinea.plane.application.PlaneUseCase;
 import com.aerolinea.plane.domain.service.PlaneService;
@@ -32,6 +38,7 @@ import com.aerolinea.plane.infrastructure.in.PlaneRegisterUi;
 import com.aerolinea.plane.infrastructure.in.PlaneUpdateUi;
 import com.aerolinea.status.domain.service.StatusService;
 import com.aerolinea.trip.domain.service.TripService;
+import com.aerolinea.trip.infrastructure.in.InfoFlyUi;
 import com.aerolinea.trip.infrastructure.in.TripDeleteUi;
 import com.aerolinea.trip.infrastructure.in.TripDetailsUi;
 import com.aerolinea.trip.infrastructure.in.TripUpdateUi;
@@ -55,14 +62,12 @@ public class AdminUi {
     private final FlightConnectionService flightConnectionService;
     private final CustomerService customerService;
     private final DocumenttypeService documenttypeService;
-
-
+    private final FlightFaresService flightFaresService;
 
     public AdminUi(PlaneService planeService, AirlineService airlineService, ModelService modelService,
             StatusService statusService, TripCrewService tripCrewService, CountryService countryService,
             CityService cityService, AirportService airportService, TripService tripService,
-            FlightConnectionService flightConnectionService, CustomerService customerService,
-            DocumenttypeService documenttypeService) {
+            FlightConnectionService flightConnectionService,  CustomerService customerService,DocumenttypeService documenttypeService,FlightFaresService flightFaresService  ) {
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.modelService = modelService;
@@ -75,6 +80,7 @@ public class AdminUi {
         this.flightConnectionService = flightConnectionService;
         this.customerService = customerService;
         this.documenttypeService = documenttypeService;
+        this.flightFaresService = flightFaresService;
     }
 
     public void showAdminUi() {
@@ -162,6 +168,7 @@ public class AdminUi {
             detailsCrewToTrip.showDetailsCrewToTripUi();
         });
         panel.add(crewDetails);
+        //
         // panel.add(createMenuButton("Consultar Asignación de Tripulación"));
         return panel;
     }
@@ -231,91 +238,142 @@ public class AdminUi {
         panel.add(updateAirport);
         //
 
-         // boton de consultar aeropuerto
-         JButton getAirport = createMenuButton("Consultar Informacion de Aeropuero");
-         getAirport.addActionListener(e -> {
-             AirportDetailsUi airportDetailsUi = new AirportDetailsUi(airportService, countryService, cityService);
-             airportDetailsUi.showAirportDetailsUi();
-         });
-         panel.add(getAirport);
-         //
+        // boton de consultar aeropuerto
+        JButton getAirport = createMenuButton("Consultar Informacion de Aeropuero");
+        getAirport.addActionListener(e -> {
+            AirportDetailsUi airportDetailsUi = new AirportDetailsUi(airportService, countryService, cityService);
+            airportDetailsUi.showAirportDetailsUi();
+        });
+        panel.add(getAirport);
+        //
 
-         // boton de eliminar aeropuerto
-         JButton deleteAirport = createMenuButton("Eliminar Aeropuero");
-         deleteAirport.addActionListener(e -> {
-             AirportDeleteUi airportDeleteUi = new AirportDeleteUi(airportService);
-             airportDeleteUi.showAirportDeleteUi();
-         });
-         panel.add(deleteAirport);
-         //
+        // boton de eliminar aeropuerto
+        JButton deleteAirport = createMenuButton("Eliminar Aeropuero");
+        deleteAirport.addActionListener(e -> {
+            AirportDeleteUi airportDeleteUi = new AirportDeleteUi(airportService);
+            airportDeleteUi.showAirportDeleteUi();
+        });
+        panel.add(deleteAirport);
+        //
 
-        //panel.add(createMenuButton("Eliminar Aeropuerto"));
+        // panel.add(createMenuButton("Eliminar Aeropuerto"));
         return panel;
     }
 
-    private  JPanel createRoutePanel() {
+    private JPanel createRoutePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
 
-          // boton de crear aeropuerto
-          JButton getTrayecto = createMenuButton("Consultar Información de Trayecto");
-          getTrayecto.addActionListener(e -> {
-              TripDetailsUi tripDetailsUi = new TripDetailsUi(tripService);
-              tripDetailsUi.showTripDetailsUi();
-          });
-          panel.add(getTrayecto);
-          //
-          // boton de actualizar  Trayecto
-          JButton updateTrayecto = createMenuButton("Actualizar Información de Trayecto");
-          updateTrayecto.addActionListener(e -> {
-              TripUpdateUi tripUpdateUi = new TripUpdateUi(tripService , airportService);
-              tripUpdateUi.showTripUpdateUi();
-          });
-          panel.add(updateTrayecto);
-          //
+        // boton de crear aeropuerto
+        JButton getTrayecto = createMenuButton("Consultar Información de Trayecto");
+        getTrayecto.addActionListener(e -> {
+            TripDetailsUi tripDetailsUi = new TripDetailsUi(tripService);
+            tripDetailsUi.showTripDetailsUi();
+        });
+        panel.add(getTrayecto);
+        //
+        // boton de actualizar Trayecto
+        JButton updateTrayecto = createMenuButton("Actualizar Información de Trayecto");
+        updateTrayecto.addActionListener(e -> {
+            TripUpdateUi tripUpdateUi = new TripUpdateUi(tripService, airportService);
+            tripUpdateUi.showTripUpdateUi();
+        });
+        panel.add(updateTrayecto);
+        //
 
-          // boton de Eliminar  Trayecto
-          JButton deleteTrayecto = createMenuButton("Eliminar Trayecto");
-          deleteTrayecto.addActionListener(e -> {
-              TripDeleteUi tripDeleteUi = new TripDeleteUi(tripService);
-              tripDeleteUi.showTripDeleteUi();
-          });
-          panel.add(deleteTrayecto);
-          //
-          // boton de Consultar Escalas de  Trayecto
-          JButton consultEscalasTrayecto = createMenuButton("Consultar Escalas de un Trayecto");
-          consultEscalasTrayecto.addActionListener(e -> {
-              FlightConnectionDetailsUi flightConnectionDetailsUi = new FlightConnectionDetailsUi(flightConnectionService);
-              flightConnectionDetailsUi.showFlightConnectionDetailsUi();
-          });
-          panel.add(consultEscalasTrayecto);
-          //
-          // boton de actualizar Escalas de  Trayecto
-          JButton updateFlightConnection = createMenuButton("Actualizar Escalas de un Trayecto");
-          updateFlightConnection.addActionListener(e -> {
-              FlightConnectionUpdateUi flightConnectionUpdateUi = new FlightConnectionUpdateUi(flightConnectionService);
-              flightConnectionUpdateUi.showFlightConnectionUpdateUi();
-          });
-          panel.add(updateFlightConnection);
-          //
-              // boton de eliminar Escalas de  Trayecto
-              JButton deleteFlightConnection = createMenuButton("Eliminar Escalas de un Trayecto");
-              deleteFlightConnection.addActionListener(e -> {
-                  FlightConnectionDeleteUi flightConnectionDeleteUi = new FlightConnectionDeleteUi(flightConnectionService);
-                  flightConnectionDeleteUi.showFlightConnectionDeleteUi();
-              });
-              panel.add(deleteFlightConnection);
-              //
+        // boton de Eliminar Trayecto
+        JButton deleteTrayecto = createMenuButton("Eliminar Trayecto");
+        deleteTrayecto.addActionListener(e -> {
+            TripDeleteUi tripDeleteUi = new TripDeleteUi(tripService);
+            tripDeleteUi.showTripDeleteUi();
+        });
+        panel.add(deleteTrayecto);
+        //
+        // boton de Consultar Escalas de Trayecto
+        JButton consultEscalasTrayecto = createMenuButton("Consultar Escalas de un Trayecto");
+        consultEscalasTrayecto.addActionListener(e -> {
+            FlightConnectionDetailsUi flightConnectionDetailsUi = new FlightConnectionDetailsUi(
+                    flightConnectionService);
+            flightConnectionDetailsUi.showFlightConnectionDetailsUi();
+        });
+        panel.add(consultEscalasTrayecto);
+        //
+        // boton de actualizar Escalas de Trayecto
+        JButton updateFlightConnection = createMenuButton("Actualizar Escalas de un Trayecto");
+        updateFlightConnection.addActionListener(e -> {
+            FlightConnectionUpdateUi flightConnectionUpdateUi = new FlightConnectionUpdateUi(flightConnectionService);
+            flightConnectionUpdateUi.showFlightConnectionUpdateUi();
+        });
+        panel.add(updateFlightConnection);
+        //
+        // boton de eliminar Escalas de Trayecto
+        JButton deleteFlightConnection = createMenuButton("Eliminar Escalas de un Trayecto");
+        deleteFlightConnection.addActionListener(e -> {
+            FlightConnectionDeleteUi flightConnectionDeleteUi = new FlightConnectionDeleteUi(flightConnectionService);
+            flightConnectionDeleteUi.showFlightConnectionDeleteUi();
+        });
+        panel.add(deleteFlightConnection);
+        //
+
+        // boton de consultar vuelo
+        JButton consultarVueloBoton = createMenuButton("Consultar todos los detalles de un vuelo");
+        consultarVueloBoton.addActionListener(e -> {
+            InfoFlyUi infoFlyUi = new InfoFlyUi(flightConnectionService,  tripService,  planeService);
+            infoFlyUi.showInfoFlyUi();
+        });
+        panel.add(consultarVueloBoton);
+        //
+
+         // boton de consultar asignar avion a vuelo
+         JButton asignarAvion = createMenuButton("asignar avion a vuel");
+         asignarAvion.addActionListener(e -> {
+             AssignPlaneToTripUi assignPlaneToTripUi = new AssignPlaneToTripUi(flightConnectionService,  planeService);
+             assignPlaneToTripUi.showAssignPlaneToTripUi();
+         });
+         panel.add(asignarAvion);
+         //
         return panel;
     }
 
-    private static JPanel createFarePanel() {
+    private  JPanel createFarePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
-        panel.add(createMenuButton("Registrar Tarifa de Vuelo"));
-        panel.add(createMenuButton("Consultar Tarifa de Vuelo"));
-        panel.add(createMenuButton("Actualizar Información de Tarifa de Vuelo"));
-        panel.add(createMenuButton("Eliminar Tarifa de Vuelo"));
+
+        // boton de Registrar Tarifa de Vuelo
+        JButton addFlightFare = createMenuButton("Registrar Tarifa de Vuelo");
+        addFlightFare.addActionListener(e -> {
+            FlightFareRegisterUi flightFareRegisterUi = new FlightFareRegisterUi(flightFaresService);
+            flightFareRegisterUi.showFlightFareRegisterUi();
+        });
+        panel.add(addFlightFare);
+        //
+        // boton de Actualizar Tarifa de Vuelo
+        JButton updateFlightFare = createMenuButton("Actualizar Tarifa de Vuelo");
+        updateFlightFare.addActionListener(e -> {
+            FlightFareUpdateUi flightFareUpdateUi = new FlightFareUpdateUi(flightFaresService);
+            flightFareUpdateUi.showFlightFareUpdateUi();
+        });
+        panel.add(updateFlightFare);
+        //
+
+        // boton de Eliminar Tarifa de Vuelo
+        JButton deleteFlightFare = createMenuButton("Eliminar Tarifa de Vuelo");
+        deleteFlightFare.addActionListener(e -> {
+            FlightFareDeleteUi flightFareDeleteUi = new FlightFareDeleteUi(flightFaresService);
+            flightFareDeleteUi.showFlightFareDeleteUi();
+        });
+        panel.add(deleteFlightFare);
+        //
+        // Falta boton de consulta!
+        // boton de Consultar Tarifa de Vuelo
+        JButton detailsFlightFare = createMenuButton("Consultar Tarifas de Vuelo");
+        detailsFlightFare.addActionListener(e -> {
+            FlightFareDetailsUi flightFareDetailsUi = new FlightFareDetailsUi(flightFaresService);
+            flightFareDetailsUi.showFlightFareDetailsUi();
+        });
+        panel.add(detailsFlightFare);
+        //
+
         return panel;
     }
 
