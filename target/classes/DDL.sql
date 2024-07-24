@@ -1,6 +1,21 @@
 
 drop database if exists aerolinea;
 
+/*
+Borrar datos de tabla
+SET foreign_key_checks = 0;
+drop table customers;
+CREATE TABLE customers(
+    id VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    age INT NOT NULL,
+    idDocType INT,
+    documentNumber VARCHAR(30), -- Añadir este campo
+    FOREIGN KEY (idDocType) REFERENCES documentTypes(id) ON DELETE SET NULL
+);
+SET foreign_key_checks = 1;
+*/
+
 create database if not exists aerolinea;
 
 use aerolinea;
@@ -29,6 +44,7 @@ CREATE TABLE customers(
     name VARCHAR(30) NOT NULL,
     age INT NOT NULL,
     idDocType INT,
+    documentNumber VARCHAR(30), -- Añadir este campo
     FOREIGN KEY (idDocType) REFERENCES documentTypes(id) ON DELETE SET NULL
 );
 
@@ -291,9 +307,12 @@ INSERT INTO documentTypes (name) VALUES
     ('Tarjeta de Residencia');
 
 -- Insertar clientes
-INSERT INTO customers (id, name, age, idDocType) VALUES
-    ('C12345', 'Juan Pérez', 30, (SELECT id FROM documentTypes WHERE name = 'DNI')),
-    ('C67890', 'María López', 25, (SELECT id FROM documentTypes WHERE name = 'Pasaporte'));
+INSERT INTO customers (id, name, age, idDocType, documentNumber) VALUES 
+('CUST001', 'John Doe', 30, 1, '123456789'),
+('CUST002', 'Jane Smith', 25, 2, '987654321'),
+('CUST003', 'Michael Johnson', 40, 1, '456789123'),
+('CUST004', 'Emily Davis', 22, 3, '321654987'),
+('CUST005', 'William Brown', 35, 2, '789123456');
 
 -- Insertar tarifas de vuelo
 INSERT INTO flightFares (description, details, value) VALUES
