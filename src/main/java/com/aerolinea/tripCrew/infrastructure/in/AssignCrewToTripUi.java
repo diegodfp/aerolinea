@@ -89,7 +89,7 @@ public class AssignCrewToTripUi {
         List<TripConnectionInfo> connections = tripCrewService.getAllFlightConnections();
         for (TripConnectionInfo connection : connections) {
             tripConnectionComboBox.addItem("Trip: " + connection.getTripId() + ", Airport: "
-                    + connection.getAirportName() + ", Plane: " + connection.getPlanePlates());
+                    + connection.getOriginAirport() + ", Plane: " + connection.getPlaneId());
         }
     }
 

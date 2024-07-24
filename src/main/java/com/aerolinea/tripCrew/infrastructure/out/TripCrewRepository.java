@@ -68,29 +68,40 @@ public class TripCrewRepository implements TripCrewService {
     }
 
     @Override
-    public List<TripConnectionInfo> getAllFlightConnections() {
-        List<TripConnectionInfo> connections = new ArrayList<>();
-        String sql = "SELECT fc.id, t.id as tripId, a.name as airportName, p.plates as planePlates " +
-                "FROM flightConnections fc " +
-                "JOIN trips t ON fc.idTrip = t.id " +
-                "JOIN airports a ON fc.idAirport = a.id " +
-                "JOIN planes p ON fc.idPlan = p.id";
-        try (Connection connection = DatabaseConfig.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                TripConnectionInfo info = new TripConnectionInfo();
-                info.setConnectionId(resultSet.getInt("id"));
-                info.setTripId(resultSet.getInt("tripId"));
-                info.setAirportName(resultSet.getString("airportName"));
-                info.setPlanePlates(resultSet.getString("planePlates"));
-                connections.add(info);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+public List<TripConnectionInfo> getAllFlightConnections() {
+    List<TripConnectionInfo> connections = new ArrayList<>();
+    String sql = "SELECT fc.id, fc.numConnection, fc.idTrip, t.date as tripDate, t.price as tripPrice, " +
+                 "t.originAirport, t.destinationAirport, fc.idPlane, " +
+                 "fc.departureAirport, fc.arrivalAirport, fc.departureTime, fc.arrivalTime, " +
+                 "fc.orderNumber, fc.connectionType " +
+                 "FROM flightConnections fc " +
+                 "JOIN trips t ON fc.idTrip = t.id";
+    try (Connection connection = DatabaseConfig.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql);
+         ResultSet resultSet = statement.executeQuery()) {
+        while (resultSet.next()) {
+            TripConnectionInfo info = new TripConnectionInfo();
+            info.setConnectionId(resultSet.getInt("id"));
+            info.setNumConnection(resultSet.getString("numConnection"));
+            info.setTripId(resultSet.getInt("idTrip"));
+            info.setTripDate(resultSet.getString("tripDate"));
+            info.setTripPrice(resultSet.getDouble("tripPrice"));
+            info.setOriginAirport(resultSet.getString("originAirport"));
+            info.setDestinationAirport(resultSet.getString("destinationAirport"));
+            info.setPlaneId(resultSet.getInt("idPlane"));
+            info.setDepartureAirport(resultSet.getString("departureAirport"));
+            info.setArrivalAirport(resultSet.getString("arrivalAirport"));
+            info.setDepartureTime(resultSet.getString("departureTime"));
+            info.setArrivalTime(resultSet.getString("arrivalTime"));
+            info.setOrderNumber(resultSet.getInt("orderNumber"));
+            info.setConnectionType(resultSet.getString("connectionType"));
+            connections.add(info);
         }
-        return connections;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return connections;
+}
 
     @Override
     public boolean isEmployeeAssignedToConnection(String employeeId, int connectionId) {
