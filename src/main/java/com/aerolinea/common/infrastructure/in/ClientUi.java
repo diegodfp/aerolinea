@@ -10,8 +10,9 @@ import com.aerolinea.country.domain.entity.Country;
 
 import javax.swing.*;
 import java.awt.*;
-//import java.time.LocalDate;
-//import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class ClientUi {
     private JComboBox<String> destinationAirportComboBox;
     private JTextField departureDateField;
     private JTextField returnDateField;
-    private JComboBox<String> resultsComboBox;
+    private JComboBox<String> resultComboBox;
 
     public ClientUi(FlightConnectionService flightConnectionService, AirportService airportService, CityService cityService, CountryService countryService) {
         this.flightConnectionService = flightConnectionService;
@@ -87,8 +88,9 @@ public class ClientUi {
         JButton searchButton = new JButton("Buscar");
         searchButton.addActionListener(e -> searchFlights());
 
-        JLabel resultsLabel = new JLabel("Resultados:");
-        resultsComboBox = new JComboBox<>();
+        resultComboBox = new JComboBox<>();
+        JButton selectFlightButton = new JButton("Seleccionar Vuelo");
+        selectFlightButton.addActionListener(e -> selectFlight());
 
         panel.add(originCountryLabel);
         panel.add(originCountryComboBox);
@@ -107,8 +109,8 @@ public class ClientUi {
         panel.add(returnDateLabel);
         panel.add(returnDateField);
         panel.add(searchButton);
-        panel.add(resultsLabel);
-        panel.add(resultsComboBox);
+        panel.add(resultComboBox);
+        panel.add(selectFlightButton);
 
         updateOriginCityComboBox();
         updateDestinationCityComboBox();
@@ -126,10 +128,9 @@ public class ClientUi {
                 .collect(Collectors.toList());
     }
 
-    private List<String> getAirportNames(String cityId) {
+    private List<Airport> getAirportNames(String cityId) {
         return airportService.getAllAirports().stream()
                 .filter(airport -> airport.getIdCity().equals(cityId))
-                .map(Airport::getName)
                 .collect(Collectors.toList());
     }
 
@@ -164,67 +165,77 @@ public class ClientUi {
     private void updateOriginAirportComboBox() {
         String originCountryId = getCountryId((String) originCountryComboBox.getSelectedItem());
         String originCityId = getCityId((String) originCityComboBox.getSelectedItem(), originCountryId);
-        originAirportComboBox.setModel(new DefaultComboBoxModel<>(getAirportNames(originCityId).toArray(new String[0])));
+        List<Airport> airports = getAirportNames(originCityId);
+        originAirportComboBox.setModel(new DefaultComboBoxModel<>(airports.stream().map(Airport::getName).toArray(String[]::new)));
     }
 
     private void updateDestinationAirportComboBox() {
         String destinationCountryId = getCountryId((String) destinationCountryComboBox.getSelectedItem());
         String destinationCityId = getCityId((String) destinationCityComboBox.getSelectedItem(), destinationCountryId);
-        destinationAirportComboBox.setModel(new DefaultComboBoxModel<>(getAirportNames(destinationCityId).toArray(new String[0])));
+        List<Airport> airports = getAirportNames(destinationCityId);
+        destinationAirportComboBox.setModel(new DefaultComboBoxModel<>(airports.stream().map(Airport::getName).toArray(String[]::new)));
     }
 
-    // private boolean isValidDateFormat(String date) {
-    //     try {
-    //         LocalDate.parse(date);
-    //         return true;
-    //     } catch (DateTimeParseException e) {
-    //         return false;
-    //     }
-    // }
-
     private void searchFlights() {
-        // Obtiene el nombre de los aeropuertos seleccionados
-        String originAirportName = (String) originAirportComboBox.getSelectedItem();
-        String destinationAirportName = (String) destinationAirportComboBox.getSelectedItem();
-        
-        // Obtiene los IDs de los aeropuertos a partir de sus nombres
-        String originAirportId = getAirportIdByName(originAirportName);
-        String destinationAirportId = getAirportIdByName(destinationAirportName);
-        
-        // Verifica si se encontraron los IDs de los aeropuertos
-        if (originAirportId == null || destinationAirportId == null) {
-            JOptionPane.showMessageDialog(null, "Error al obtener los IDs de los aeropuertos seleccionados.");
-            return;
-        }
-    
-        // Obtiene todos los IDs de trayectos y filtra los vuelos que coinciden con los aeropuertos seleccionados
+        String originAirport = (String) originAirportComboBox.getSelectedItem();
+        String destinationAirport = (String) destinationAirportComboBox.getSelectedItem();
+
+        // Obtener el ID del aeropuerto de origen y destino
+        String originAirportId = airportService.getAllAirports().stream()
+                .filter(airport -> airport.getName().equals(originAirport))
+                .map(Airport::getId)
+                .findFirst()
+                .orElse(null);
+
+        String destinationAirportId = airportService.getAllAirports().stream()
+                .filter(airport -> airport.getName().equals(destinationAirport))
+                .map(Airport::getId)
+                .findFirst()
+                .orElse(null);
+
         List<Integer> allTripIds = flightConnectionService.getAllTripIds();
         List<FlightConnection> matchingFlights = allTripIds.stream()
             .flatMap(tripId -> flightConnectionService.getConnectionsByTripId(tripId).stream())
             .filter(flight -> flight.getDepartureAirport().equals(originAirportId) &&
                               flight.getArrivalAirport().equals(destinationAirportId))
             .collect(Collectors.toList());
-    
-        // Actualiza el JComboBox con los resultados encontrados
-        updateResultsComboBox(matchingFlights);
+
+        displayResults(matchingFlights);
     }
 
-    private String getAirportIdByName(String airportName) {
-        return airportService.getAllAirports().stream()
-            .filter(airport -> airport.getName().equals(airportName))
-            .map(Airport::getId)
-            .findFirst()
-            .orElse(null);
-    }
-    
-    
-    private void updateResultsComboBox(List<FlightConnection> flights) {
+    private void displayResults(List<FlightConnection> flights) {
         if (flights.isEmpty()) {
-            resultsComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"No se encontraron vuelos"}));
+            resultComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"No se encontraron vuelos."}));
         } else {
-            resultsComboBox.setModel(new DefaultComboBoxModel<>(flights.stream()
-                .map(flight -> "Vuelo: " + flight.getNumConnection() + ", Salida: " + flight.getDepartureAirport() + ", Llegada: " + flight.getArrivalAirport())
-                .toArray(String[]::new)));
+            String[] flightOptions = flights.stream()
+                    .map(flight -> "Vuelo: " + flight.getId() + ", Origen: " + flight.getDepartureAirport() + ", Destino: " + flight.getArrivalAirport())
+                    .toArray(String[]::new);
+            resultComboBox.setModel(new DefaultComboBoxModel<>(flightOptions));
+        }
+    }
+
+    private void selectFlight() {
+        String selectedFlight = (String) resultComboBox.getSelectedItem();
+        if (selectedFlight != null && !selectedFlight.equals("No se encontraron vuelos.")) {
+            // Abre la ventana para añadir pasajeros
+            String[] options = {"1", "2", "3", "4", "5"}; // Opciones de número de pasajeros
+            String numberOfPassengers = (String) JOptionPane.showInputDialog(
+                    null,
+                    "¿Cuántos pasajeros desea añadir?",
+                    "Añadir Pasajeros",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            if (numberOfPassengers != null) {
+                int numPassengers = Integer.parseInt(numberOfPassengers);
+                PassengerAssignmentUi passengerAssignmentUi = new PassengerAssignmentUi(this, numPassengers);
+                passengerAssignmentUi.setVisible(true);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione un vuelo.", "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
