@@ -33,10 +33,13 @@ public class MainUi {
      private final TripService tripService;
      private final FlightConnectionService flightConnectionService;
      private final FlightFaresService flightFaresService;
+
     private JFrame frame; // Variable de instancia
    
 
     
+  
+
     public MainUi(UserLoginUseCase loginUseCase, UserService userService, PlaneService planeService,
             AirlineService airlineService, ModelService modelService, StatusService statusService,
             TripCrewService tripCrewService, CountryService countryService, CityService cityService,
@@ -55,6 +58,7 @@ public class MainUi {
         this.tripService = tripService;
         this.flightConnectionService = flightConnectionService;
         this.flightFaresService = flightFaresService;
+
     }
 
     public void showMainUi() {

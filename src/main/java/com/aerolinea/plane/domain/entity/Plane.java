@@ -10,7 +10,7 @@ public class Plane {
     private int idStatus;
     private int idModel;
     private int idAerolinea;
-    
+
     // Getters and Setters
     public int getId() {
         return id;
@@ -81,5 +81,11 @@ public class Plane {
         this.idAerolinea = idAerolinea;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Matricula: " + plates + ", capacity: " + capacity + ", fabricationDate="
+                + fabricationDate + ", idStatus=" + idStatus + ", idModel=" + idModel + ", idAerolinea=" + idAerolinea
+                + "]";
+    }
+
 }

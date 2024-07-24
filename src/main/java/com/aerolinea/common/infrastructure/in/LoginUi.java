@@ -120,8 +120,11 @@ public class LoginUi {
                         // Lógica para vista de agente de ventas
                     } else if ("Técnico de mantenimiento".equals(rol)) {
                         // Lógica para vista de técnico de mantenimiento
-                    } else if ("Cliente".equals(rol)) {
-                        // Lógica para vista de cliente
+                    } else if ("cliente".equals(rol)) {
+                        System.out.println(" Ingreso Como cliente");
+                        frame.dispose(); // Cerrar la ventana actual
+                        ClientUi clientUi = new ClientUi(flightConnectionService, airportService, cityService, countryService); // Crear instancia de AdminUi
+                        clientUi.showSearchFlightsUi(); // Mostrar la ventana de cliente
                     }
                 } else {
                     messageLabel.setText("Usuario o contraseña incorrectos.");

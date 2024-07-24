@@ -11,6 +11,7 @@ import com.aerolinea.airport.infrastructure.in.AirportUpdateUi;
 import com.aerolinea.city.domain.service.CityService;
 import com.aerolinea.country.domain.service.CountryService;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
+import com.aerolinea.flightConnections.infrastructure.in.AssignPlaneToTripUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDeleteUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDetailsUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionUpdateUi;
@@ -28,6 +29,7 @@ import com.aerolinea.plane.infrastructure.in.PlaneRegisterUi;
 import com.aerolinea.plane.infrastructure.in.PlaneUpdateUi;
 import com.aerolinea.status.domain.service.StatusService;
 import com.aerolinea.trip.domain.service.TripService;
+import com.aerolinea.trip.infrastructure.in.InfoFlyUi;
 import com.aerolinea.trip.infrastructure.in.TripDeleteUi;
 import com.aerolinea.trip.infrastructure.in.TripDetailsUi;
 import com.aerolinea.trip.infrastructure.in.TripUpdateUi;
@@ -153,6 +155,7 @@ public class AdminUi {
             detailsCrewToTrip.showDetailsCrewToTripUi();
         });
         panel.add(crewDetails);
+        //
         // panel.add(createMenuButton("Consultar Asignación de Tripulación"));
         return panel;
     }
@@ -282,6 +285,24 @@ public class AdminUi {
         });
         panel.add(deleteFlightConnection);
         //
+
+        // boton de consultar vuelo
+        JButton consultarVueloBoton = createMenuButton("Consultar todos los detalles de un vuelo");
+        consultarVueloBoton.addActionListener(e -> {
+            InfoFlyUi infoFlyUi = new InfoFlyUi(flightConnectionService,  tripService,  planeService);
+            infoFlyUi.showInfoFlyUi();
+        });
+        panel.add(consultarVueloBoton);
+        //
+
+         // boton de consultar asignar avion a vuelo
+         JButton asignarAvion = createMenuButton("asignar avion a vuel");
+         asignarAvion.addActionListener(e -> {
+             AssignPlaneToTripUi assignPlaneToTripUi = new AssignPlaneToTripUi(flightConnectionService,  planeService);
+             assignPlaneToTripUi.showAssignPlaneToTripUi();
+         });
+         panel.add(asignarAvion);
+         //
         return panel;
     }
 

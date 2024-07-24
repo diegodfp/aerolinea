@@ -67,6 +67,8 @@ public class PlaneRepository implements PlaneService {
         return plane;
     }
 
+    
+
     @Override
     public void updatePlane(Plane planeUpdate, String originalPlates) {
         String sql = "UPDATE planes SET plates = ?, capacity = ?, fabricationDate = ?, idStatus = ?, idModel = ?, idAirline = ? WHERE plates = ?";
@@ -137,6 +139,34 @@ public class PlaneRepository implements PlaneService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public Plane findPlaneById(int id) {
+        String sql = "SELECT plates, capacity, fabricationDate, idStatus, idModel, idAirline FROM planes WHERE id = ?";
+        Plane plane = null;
+
+        try (Connection connection = DatabaseConfig.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    plane = new Plane();
+                    plane.setPlates(resultSet.getString("plates"));
+                    plane.setCapacity(resultSet.getInt("capacity"));
+                    plane.setFabricationDate(resultSet.getDate("fabricationDate"));
+                    plane.setIdStatus(resultSet.getInt("idStatus"));
+                    plane.setIdModel(resultSet.getInt("idModel"));
+                    plane.setIdAerolinea(resultSet.getInt("idAirline"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return plane;
     }
 
 }

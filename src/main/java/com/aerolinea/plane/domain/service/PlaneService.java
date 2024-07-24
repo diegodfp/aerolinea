@@ -9,6 +9,8 @@ public interface PlaneService {
 
     Plane findPlaneById(String id);
 
+    Plane findPlaneById(int id);
+
     void updatePlane(Plane planeUpdate, String originalPlate);
 
     void deletePlane(String plate);

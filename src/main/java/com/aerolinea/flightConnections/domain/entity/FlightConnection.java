@@ -118,13 +118,11 @@ public class FlightConnection {
 
     @Override
     public String toString() {
-        return "FlightConnection{" +
-                "id=" + id +
-                ", numConnection='" + numConnection + '\'' +
-                ", idTrip=" + idTrip +
-                ", idPlane=" + idPlane +
-                ", departureAirport='" + departureAirport + '\'' +
-                ", arrivalAirport='" + arrivalAirport + '\'' +
+        return 
+                "Id del Trayecto: " + id +
+                ", Conexion #:'" + numConnection + '\'' +
+                ", Salida desde '" + departureAirport + '\'' +
+                ", Lllegada : '" + arrivalAirport + '\'' +
                 ", departureTime=" + departureTime +
                 ", arrivalTime=" + arrivalTime +
                 ", orderNumber=" + orderNumber +
