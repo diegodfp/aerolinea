@@ -10,6 +10,11 @@ import com.aerolinea.airport.infrastructure.in.AirportRegisterUi;
 import com.aerolinea.airport.infrastructure.in.AirportUpdateUi;
 import com.aerolinea.city.domain.service.CityService;
 import com.aerolinea.country.domain.service.CountryService;
+import com.aerolinea.customer.domain.service.CustomerService;
+import com.aerolinea.customer.infrastructure.in.CustomerDetailsUi;
+import com.aerolinea.customer.infrastructure.in.CustomerRegisterUi;
+import com.aerolinea.customer.infrastructure.in.CustomerUpdateUi;
+import com.aerolinea.documenttype.domain.service.DocumenttypeService;
 import com.aerolinea.flightConnections.domain.service.FlightConnectionService;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDeleteUi;
 import com.aerolinea.flightConnections.infrastructure.in.FlightConnectionDetailsUi;
@@ -44,11 +49,16 @@ public class AdminUi {
     private final AirportService airportService;
     private final TripService tripService;
     private final FlightConnectionService flightConnectionService;
+    private final CustomerService customerService;
+    private final DocumenttypeService documenttypeService;
+
+
 
     public AdminUi(PlaneService planeService, AirlineService airlineService, ModelService modelService,
             StatusService statusService, TripCrewService tripCrewService, CountryService countryService,
             CityService cityService, AirportService airportService, TripService tripService,
-            FlightConnectionService flightConnectionService) {
+            FlightConnectionService flightConnectionService, CustomerService customerService,
+            DocumenttypeService documenttypeService) {
         this.planeService = planeService;
         this.airlineService = airlineService;
         this.modelService = modelService;
@@ -59,6 +69,8 @@ public class AdminUi {
         this.airportService = airportService;
         this.tripService = tripService;
         this.flightConnectionService = flightConnectionService;
+        this.customerService = customerService;
+        this.documenttypeService = documenttypeService;
     }
 
     public void showAdminUi() {
@@ -150,12 +162,28 @@ public class AdminUi {
         return panel;
     }
 
-    private static JPanel createClientPanel() {
+    private JPanel createClientPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, 10, 10));
-        panel.add(createMenuButton("Registrar Cliente"));
-        panel.add(createMenuButton("Consultar Información de Cliente"));
-        panel.add(createMenuButton("Actualizar Información de Cliente"));
+        JButton registerButton = createMenuButton("Registrar Cliente");
+        registerButton.addActionListener(e -> {
+            CustomerRegisterUi customerRegisterUi = new CustomerRegisterUi(customerService, documenttypeService);
+            customerRegisterUi.showCustomerRegisterUi();
+        });
+        panel.add(registerButton);
+        JButton consultButton = createMenuButton("Consultar Información de Cliente");
+        consultButton.addActionListener(e -> {
+            CustomerDetailsUi customerDetailsUi = new CustomerDetailsUi(customerService);
+            customerDetailsUi.showCustomerDetailsUi();
+        });
+        panel.add(consultButton);
+
+        JButton updateButton = createMenuButton("Actualizar Información de Cliente");
+        updateButton.addActionListener(e -> {
+            CustomerUpdateUi customerUpdateUi = new CustomerUpdateUi(customerService, documenttypeService);
+            customerUpdateUi.showCustomerUpdateUi();
+        });
+        panel.add(updateButton);
         return panel;
     }
 

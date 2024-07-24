@@ -29,6 +29,10 @@ import com.aerolinea.users.domain.service.UserLoginUseCase;
 import com.aerolinea.users.domain.service.UserService;
 import com.aerolinea.users.infrastructure.out.LoginUiAdapter;
 import com.aerolinea.users.infrastructure.out.UserRepository;
+import com.aerolinea.customer.domain.service.CustomerService;
+import com.aerolinea.customer.infrastructure.out.CustomerRepository;
+import com.aerolinea.documenttype.domain.service.DocumenttypeService;
+import com.aerolinea.documenttype.infrastructure.out.DocumenttypeRepository;
 
 public class Main {
 
@@ -46,7 +50,9 @@ public class Main {
         AirportService airportService = new AirportRepository();
         TripService tripService = new TripRepository();
         FlightConnectionService flightConnectionService = new FlightConnectionRepository();
-        MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService, modelService ,statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService );
+        CustomerService customerService = new CustomerRepository();
+        DocumenttypeService documenttypeService = new DocumenttypeRepository();
+        MainUi mainWindow = new MainUi(loginUseCase,userService, planeService, airlineService, modelService ,statusService, tripCrewService, countryService, cityService, airportService, tripService, flightConnectionService, customerService, documenttypeService);
         mainWindow.showMainUi();
 
 
